@@ -1,13 +1,16 @@
-# lib-reflect
+# lib-fields
+
+    Tools to deal with fields
 
 ## Requires
 
     Java 8 or later
 
 ## pom.xml
-
+    
+    (not yet available)
     <dependency>
       <groupId>de.team33.libs</groupId>
-      <artifactId>lib-reflect</artifactId>
-      <version>8.4.4</version>
+      <artifactId>lib-fields-01</artifactId>
+      <version>1.0.0</version>
     </dependency>
