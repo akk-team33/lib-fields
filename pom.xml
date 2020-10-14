@@ -2,13 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.team33.libs</groupId>
-    <artifactId>lib-reflect</artifactId>
-    <version>8.4.5-SNAPSHOT</version>
+    <artifactId>lib-fields-01</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Team33 Reflections Library</name>
-    <description>Team33 Reflections Library</description>
-    <url>https://github.com/akk-team33/lib-reflect</url>
+    <name>Team33 Fields Library</name>
+    <description>Team33 Fields Library</description>
+    <url>https://github.com/akk-team33/lib-fields</url>
 
     <licenses>
         <license>
@@ -25,9 +25,9 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:git://github.com/akk-team33/lib-reflect.git</connection>
-        <developerConnection>scm:git:ssh://github.com:akk-team33/lib-reflect.git</developerConnection>
-        <url>https://github.com/akk-team33/lib-reflect</url>
+        <connection>scm:git:git://github.com/akk-team33/lib-fields.git</connection>
+        <developerConnection>scm:git:ssh://github.com:akk-team33/lib-fields.git</developerConnection>
+        <url>https://github.com/akk-team33/lib-fields</url>
     </scm>
 
     <dependencies>
@@ -62,22 +62,14 @@
     </dependencies>
     <properties>
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
-        <t33.java.version>1.8</t33.java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <source>${t33.java.version}</source>
-                    <target>${t33.java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -91,13 +83,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration>
-                    <show>protected</show>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <failOnError>false</failOnError>
-                    <failOnWarnings>false</failOnWarnings>
-                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadoc</id>
