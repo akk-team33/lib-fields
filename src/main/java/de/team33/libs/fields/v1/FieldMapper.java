@@ -1,4 +1,4 @@
-package de.team33.libs.reflect.v4;
+package de.team33.libs.fields.v1;
 
 import java.lang.reflect.Field;
 import java.util.Map;

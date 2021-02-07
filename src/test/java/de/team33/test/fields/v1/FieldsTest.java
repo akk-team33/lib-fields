@@ -1,6 +1,6 @@
-package de.team33.test.reflect.v4;
+package de.team33.test.fields.v1;
 
-import de.team33.libs.reflect.v4.Fields;
+import de.team33.libs.fields.v1.Fields;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -17,10 +17,10 @@ public class FieldsTest {
     public void flat() {
         assertEquals(
                 Arrays.asList(
-                        "private static final int de.team33.test.reflect.v4.FieldsTest$Inner.privateStaticFinalInt",
-                        "private static int de.team33.test.reflect.v4.FieldsTest$Inner.privateStaticInt",
-                        "private final int de.team33.test.reflect.v4.FieldsTest$Inner.privateFinalInt",
-                        "private int de.team33.test.reflect.v4.FieldsTest$Inner.privateInt"),
+                        "private static final int de.team33.test.fields.v1.FieldsTest$Inner.privateStaticFinalInt",
+                        "private static int de.team33.test.fields.v1.FieldsTest$Inner.privateStaticInt",
+                        "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
+                        "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
                 Fields.Streaming.FLAT.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
         );
     }
@@ -29,15 +29,15 @@ public class FieldsTest {
     public void deep() {
         assertEquals(
                 Arrays.asList(
-                        "private static final int de.team33.test.reflect.v4.FieldsTest$Super.privateStaticFinalInt",
-                        "private static int de.team33.test.reflect.v4.FieldsTest$Super.privateStaticInt",
-                        "private final int de.team33.test.reflect.v4.FieldsTest$Super.privateFinalInt",
-                        "private int de.team33.test.reflect.v4.FieldsTest$Super.privateInt",
-                        "private transient int de.team33.test.reflect.v4.FieldsTest$Super.privateTransientInt",
-                        "private static final int de.team33.test.reflect.v4.FieldsTest$Inner.privateStaticFinalInt",
-                        "private static int de.team33.test.reflect.v4.FieldsTest$Inner.privateStaticInt",
-                        "private final int de.team33.test.reflect.v4.FieldsTest$Inner.privateFinalInt",
-                        "private int de.team33.test.reflect.v4.FieldsTest$Inner.privateInt"),
+                        "private static final int de.team33.test.fields.v1.FieldsTest$Super.privateStaticFinalInt",
+                        "private static int de.team33.test.fields.v1.FieldsTest$Super.privateStaticInt",
+                        "private final int de.team33.test.fields.v1.FieldsTest$Super.privateFinalInt",
+                        "private int de.team33.test.fields.v1.FieldsTest$Super.privateInt",
+                        "private transient int de.team33.test.fields.v1.FieldsTest$Super.privateTransientInt",
+                        "private static final int de.team33.test.fields.v1.FieldsTest$Inner.privateStaticFinalInt",
+                        "private static int de.team33.test.fields.v1.FieldsTest$Inner.privateStaticInt",
+                        "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
+                        "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
                 Fields.Streaming.DEEP.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
         );
     }
@@ -46,23 +46,23 @@ public class FieldsTest {
     public void wide() {
         assertEquals(
                 Arrays.asList(
-                        "public static final int de.team33.test.reflect.v4.FieldsTest$ISuper1.privateStaticFinalInt",
-                        "public static final int de.team33.test.reflect.v4.FieldsTest$ISuper1.privateStaticInt",
-                        "public static final int de.team33.test.reflect.v4.FieldsTest$ISuper1.privateFinalInt",
-                        "public static final int de.team33.test.reflect.v4.FieldsTest$ISuper1.privateInt",
-                        "public static final int de.team33.test.reflect.v4.FieldsTest$ISuper2.privateStaticFinalInt",
-                        "public static final int de.team33.test.reflect.v4.FieldsTest$ISuper2.privateStaticInt",
-                        "public static final int de.team33.test.reflect.v4.FieldsTest$ISuper2.privateFinalInt",
-                        "public static final int de.team33.test.reflect.v4.FieldsTest$ISuper2.privateInt",
-                        "private static final int de.team33.test.reflect.v4.FieldsTest$Super.privateStaticFinalInt",
-                        "private static int de.team33.test.reflect.v4.FieldsTest$Super.privateStaticInt",
-                        "private final int de.team33.test.reflect.v4.FieldsTest$Super.privateFinalInt",
-                        "private int de.team33.test.reflect.v4.FieldsTest$Super.privateInt",
-                        "private transient int de.team33.test.reflect.v4.FieldsTest$Super.privateTransientInt",
-                        "private static final int de.team33.test.reflect.v4.FieldsTest$Inner.privateStaticFinalInt",
-                        "private static int de.team33.test.reflect.v4.FieldsTest$Inner.privateStaticInt",
-                        "private final int de.team33.test.reflect.v4.FieldsTest$Inner.privateFinalInt",
-                        "private int de.team33.test.reflect.v4.FieldsTest$Inner.privateInt"),
+                        "public static final int de.team33.test.fields.v1.FieldsTest$ISuper1.privateStaticFinalInt",
+                        "public static final int de.team33.test.fields.v1.FieldsTest$ISuper1.privateStaticInt",
+                        "public static final int de.team33.test.fields.v1.FieldsTest$ISuper1.privateFinalInt",
+                        "public static final int de.team33.test.fields.v1.FieldsTest$ISuper1.privateInt",
+                        "public static final int de.team33.test.fields.v1.FieldsTest$ISuper2.privateStaticFinalInt",
+                        "public static final int de.team33.test.fields.v1.FieldsTest$ISuper2.privateStaticInt",
+                        "public static final int de.team33.test.fields.v1.FieldsTest$ISuper2.privateFinalInt",
+                        "public static final int de.team33.test.fields.v1.FieldsTest$ISuper2.privateInt",
+                        "private static final int de.team33.test.fields.v1.FieldsTest$Super.privateStaticFinalInt",
+                        "private static int de.team33.test.fields.v1.FieldsTest$Super.privateStaticInt",
+                        "private final int de.team33.test.fields.v1.FieldsTest$Super.privateFinalInt",
+                        "private int de.team33.test.fields.v1.FieldsTest$Super.privateInt",
+                        "private transient int de.team33.test.fields.v1.FieldsTest$Super.privateTransientInt",
+                        "private static final int de.team33.test.fields.v1.FieldsTest$Inner.privateStaticFinalInt",
+                        "private static int de.team33.test.fields.v1.FieldsTest$Inner.privateStaticInt",
+                        "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
+                        "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
                 Fields.Streaming.WIDE.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
                     );
     }
@@ -71,8 +71,8 @@ public class FieldsTest {
     public void significantFlat() {
         assertEquals(
                 Arrays.asList(
-                        "private final int de.team33.test.reflect.v4.FieldsTest$Inner.privateFinalInt",
-                        "private int de.team33.test.reflect.v4.FieldsTest$Inner.privateInt"),
+                        "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
+                        "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
                 Fields.Streaming.SIGNIFICANT_FLAT.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
                     );
     }
@@ -81,10 +81,10 @@ public class FieldsTest {
     public void significantDeep() {
         assertEquals(
                 Arrays.asList(
-                        "private final int de.team33.test.reflect.v4.FieldsTest$Super.privateFinalInt",
-                        "private int de.team33.test.reflect.v4.FieldsTest$Super.privateInt",
-                        "private final int de.team33.test.reflect.v4.FieldsTest$Inner.privateFinalInt",
-                        "private int de.team33.test.reflect.v4.FieldsTest$Inner.privateInt"),
+                        "private final int de.team33.test.fields.v1.FieldsTest$Super.privateFinalInt",
+                        "private int de.team33.test.fields.v1.FieldsTest$Super.privateInt",
+                        "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
+                        "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
                 Fields.Streaming.SIGNIFICANT_DEEP.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
                     );
     }
@@ -110,15 +110,15 @@ public class FieldsTest {
     public void namingCanonical() {
         assertEquals(
                 Arrays.asList(
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateStaticFinalInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateStaticInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateFinalInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateTransientInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Inner.privateStaticFinalInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Inner.privateStaticInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Inner.privateFinalInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Inner.privateInt"),
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateStaticFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateStaticInt",
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateInt",
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateTransientInt",
+                        "de.team33.test.fields.v1.FieldsTest.Inner.privateStaticFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.Inner.privateStaticInt",
+                        "de.team33.test.fields.v1.FieldsTest.Inner.privateFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.Inner.privateInt"),
                 Fields.deepStreamOf(Inner.class).map(Fields.Naming.CANONICAL).collect(Collectors.toList())
         );
     }
@@ -127,15 +127,15 @@ public class FieldsTest {
     public void namingContextSensitiveQualified() {
         assertEquals(
                 Arrays.asList(
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateStaticFinalInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateStaticInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateFinalInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Super.privateTransientInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Inner.privateStaticFinalInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Inner.privateStaticInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Inner.privateFinalInt",
-                        "de.team33.test.reflect.v4.FieldsTest.Inner.privateInt",
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateStaticFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateStaticInt",
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateInt",
+                        "de.team33.test.fields.v1.FieldsTest.Super.privateTransientInt",
+                        "de.team33.test.fields.v1.FieldsTest.Inner.privateStaticFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.Inner.privateStaticInt",
+                        "de.team33.test.fields.v1.FieldsTest.Inner.privateFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.Inner.privateInt",
                         "privateStaticFinalInt",
                         "privateFinalInt",
                         "privateInt"),

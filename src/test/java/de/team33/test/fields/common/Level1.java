@@ -1,4 +1,4 @@
-package de.team33.test.reflect.common;
+package de.team33.test.fields.common;
 
 import java.util.Set;
 

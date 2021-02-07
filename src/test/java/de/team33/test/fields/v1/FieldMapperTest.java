@@ -1,7 +1,7 @@
-package de.team33.test.reflect.v4;
+package de.team33.test.fields.v1;
 
 import com.google.common.collect.ImmutableMap;
-import de.team33.libs.reflect.v4.FieldMapper;
+import de.team33.libs.fields.v1.FieldMapper;
 import org.junit.Test;
 
 import java.math.BigInteger;

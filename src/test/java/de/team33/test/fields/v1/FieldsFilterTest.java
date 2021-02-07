@@ -1,7 +1,7 @@
-package de.team33.test.reflect.v4;
+package de.team33.test.fields.v1;
 
-import de.team33.libs.reflect.v4.Fields;
-import de.team33.test.reflect.common.Sample;
+import de.team33.libs.fields.v1.Fields;
+import de.team33.test.fields.common.Sample;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
