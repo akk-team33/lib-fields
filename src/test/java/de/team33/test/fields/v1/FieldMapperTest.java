@@ -2,6 +2,7 @@ package de.team33.test.fields.v1;
 
 import com.google.common.collect.ImmutableMap;
 import de.team33.libs.fields.v1.FieldMapper;
+import de.team33.libs.fields.v1.Fields;
 import org.junit.Test;
 
 import java.math.BigInteger;
@@ -23,6 +24,16 @@ public class FieldMapperTest {
     public void copy() {
         final Sample origin = new Sample();
         final Sample result = subject.copy(origin, new Sample());
+        assertEquals(origin, result);
+    }
+
+    @Test
+    public void copyDate() {
+        final FieldMapper<Date> mapper = FieldMapper.factory(Fields.Mapping.INSTANCE_DEEP)
+                                                    .mapperFor(Date.class);
+        final Date origin = new Date(new Random().nextLong());
+        //final TreeMap<String, Object> stage = mapper.map(origin, new TreeMap<>());
+        final Date result = mapper.copy(origin, new Date());
         assertEquals(origin, result);
     }
 

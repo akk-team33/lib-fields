@@ -7,8 +7,11 @@ import java.util.function.Function;
 import static java.lang.String.format;
 
 /**
- * <p>A tool that can copy instances of a certain type field by field or translate them into or from a map.</p>
- * <p>To get an instance use {@link #factory(Function)} or {@link #FACTORY} and {@link Factory#mapperFor(Class)}.</p>
+ * A tool that can copy instances of a certain type field by field or translate them into or from a map.
+ * <p>
+ * To get an instance use {@link Factory#mapperFor(Class)}.
+ * <p>
+ * To get a {@link Factory} use {@link #factory(Function)} or simply use the default {@link #FACTORY}.
  *
  * @param <T> the type of interest
  */

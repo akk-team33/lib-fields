@@ -97,6 +97,14 @@ public final class Fields {
                       .flatMap(Stream::of);
     }
 
+    private static Map<String, Field> mapping(final Class<?> type,
+                                              final Function<Class<?>, Stream<Field>> streaming,
+                                              final Function<Field, String> naming) {
+        return streaming.apply(type)
+                        .peek(field -> field.setAccessible(true))
+                        .collect(toMap(naming, field -> field));
+    }
+
     /**
      * Provides some predefined {@linkplain Predicate filters} for {@link Field Fields}.
      */
@@ -250,19 +258,27 @@ public final class Fields {
     public interface Mapping extends Function<Class<?>, Map<String, Field>> {
 
         /**
+         * Defines a {@link Mapping} that only considers the fields straightly declared by the underlying class
+         * which are not static.
+         */
+        Mapping INSTANCE_FLAT = type -> mapping(type, Streaming.INSTANCE_FLAT, Naming.SIMPLE);
+
+        /**
          * Defines a {@link Mapping} that only considers the fields straightly declared by the underlying class,
          * which are neither static nor transient.
          */
-        Mapping SIGNIFICANT_FLAT = type -> Streaming.SIGNIFICANT_FLAT.apply(type)
-                                                                     .peek(field -> field.setAccessible(true))
-                                                                     .collect(toMap(Naming.SIMPLE, field -> field));
+        Mapping SIGNIFICANT_FLAT = type -> mapping(type, Streaming.SIGNIFICANT_FLAT, Naming.SIMPLE);
+
+        /**
+         * Defines a {@link Mapping} that considers the fields declared by the underlying class or one of its
+         * superclasses which are not static.
+         */
+        Mapping INSTANCE_DEEP = type -> mapping(type, Streaming.INSTANCE_DEEP, Naming.compact(type));
 
         /**
          * Defines a {@link Mapping} that considers the fields declared by the underlying class or one of its
          * superclasses, which are neither static nor transient.
          */
-        Mapping SIGNIFICANT_DEEP = type -> Streaming.SIGNIFICANT_DEEP.apply(type)
-                                                                     .peek(field -> field.setAccessible(true))
-                                                                     .collect(toMap(Naming.compact(type), field -> field));
+        Mapping SIGNIFICANT_DEEP = type -> mapping(type, Streaming.SIGNIFICANT_DEEP, Naming.compact(type));
     }
 }
