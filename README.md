@@ -8,7 +8,7 @@
 
 ## pom.xml
     
-    (not yet available)
+    (not yet available on maven central)
     <dependency>
       <groupId>de.team33.libs</groupId>
       <artifactId>lib-fields-01</artifactId>

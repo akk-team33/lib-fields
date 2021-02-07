@@ -219,7 +219,7 @@ public class FieldsTest {
     }
 
     @SuppressWarnings("unused")
-    class Sub extends Inner implements ISuper1, ISuper2 {
+    static class Sub extends Inner implements ISuper1, ISuper2 {
 
         private static final int privateStaticFinalInt = 0;
 

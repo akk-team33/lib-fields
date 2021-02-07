@@ -1,5 +1,7 @@
 package de.team33.libs.reflect.v4;
 
+import de.team33.libs.classes.v1.Classes;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Map;
@@ -22,18 +24,22 @@ public final class Fields {
     private Fields() {
     }
 
+    private static <E> Stream<E> streamOfNullable(final E element) {
+        return (null == element) ? Stream.empty() : Stream.of(element);
+    }
+
     /**
      * Streams all {@link Field}s straightly declared by a given {@link Class}
      */
     public static Stream<Field> flatStreamOf(final Class<?> type) {
-        return streamOf(Classes.streamOf(type));
+        return streamOf(streamOfNullable(type));
     }
 
     /**
      * Streams all {@link Field}s declared by a given {@link Class} or any of its superclasses.
      */
     public static Stream<Field> deepStreamOf(final Class<?> type) {
-        return streamOf(Classes.deepStreamOf(type));
+        return streamOf(Classes.lineageClasses(type));
     }
 
     /**
@@ -41,23 +47,23 @@ public final class Fields {
      * superinterfaces.
      */
     public static Stream<Field> wideStreamOf(final Class<?> type) {
-        return streamOf(Classes.wideStreamOf(type));
+        return streamOf(Classes.lineageHierarchy(type));
     }
 
     /**
-     * <p>Determines an extended field name that is as compact as possible but unique in the context of a certain class
-     * and its class hierarchy.</p>
-     *
-     * <p>This takes into account the fact that different fields of the same name can be declared within a class
-     * hierarchy.</p>
+     * Determines an extended field name that is as compact as possible but unique in the context of a certain class
+     * and its class hierarchy.
+     * <p>
+     * This takes into account the fact that different fields of the same name can be declared within a class
+     * hierarchy.
      *
      * <ul>
-     *     <li>If the field is declared directly in the context class, the
-     *     {@linkplain Field#getName() simple field name} results.</li>
-     *     <li>If the field is declared in a super class of the context class, the name is preceded by as many dots
-     *     ('.') as it corresponds to the hierarchy level of the declaring class compared to the context class.</li>
-     *     <li>If the field is declared in a class that is not a direct or indirect superclass of the context class,
-     *     the result is a fully qualified field name.</li>
+     * <li>If the field is declared directly in the context class, the
+     * {@linkplain Field#getName() simple field name} results.</li>
+     * <li>If the field is declared in a super class of the context class, the name is preceded by as many dots
+     * ('.') as it corresponds to the hierarchy level of the declaring class compared to the context class.</li>
+     * <li>If the field is declared in a class that is not a direct or indirect superclass of the context class,
+     * the result is a fully qualified field name.</li>
      * </ul>
      */
     public static String compactName(final Class<?> contextClass, final Field field) {
@@ -88,9 +94,7 @@ public final class Fields {
 
     private static Stream<Field> streamOf(final Stream<Class<?>> classes) {
         return classes.map(Class::getDeclaredFields)
-                .map(Stream::of)
-                .reduce(Stream::concat)
-                .orElseGet(Stream::empty);
+                      .flatMap(Stream::of);
     }
 
     /**
@@ -250,18 +254,15 @@ public final class Fields {
          * which are neither static nor transient.
          */
         Mapping SIGNIFICANT_FLAT = type -> Streaming.SIGNIFICANT_FLAT.apply(type)
-                .peek(field -> field.setAccessible(true))
-                .collect(toMap(Naming.SIMPLE, field -> field));
+                                                                     .peek(field -> field.setAccessible(true))
+                                                                     .collect(toMap(Naming.SIMPLE, field -> field));
 
         /**
          * Defines a {@link Mapping} that considers the fields declared by the underlying class or one of its
          * superclasses, which are neither static nor transient.
          */
         Mapping SIGNIFICANT_DEEP = type -> Streaming.SIGNIFICANT_DEEP.apply(type)
-                .peek(field -> field.setAccessible(true))
-                .collect(toMap(Naming.compact(type), field -> field));
-    }
-
-    private static class CompactNameException extends RuntimeException {
+                                                                     .peek(field -> field.setAccessible(true))
+                                                                     .collect(toMap(Naming.compact(type), field -> field));
     }
 }
