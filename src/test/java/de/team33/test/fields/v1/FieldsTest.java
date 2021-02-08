@@ -68,7 +68,37 @@ public class FieldsTest {
     }
 
     @Test
-    public void significantFlat() {
+    public final void compactName() {
+        assertEquals(
+                Arrays.asList(
+                        "de.team33.test.fields.v1.FieldsTest.ISuper1.privateStaticFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.ISuper1.privateStaticInt",
+                        "de.team33.test.fields.v1.FieldsTest.ISuper1.privateFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.ISuper1.privateInt",
+                        "de.team33.test.fields.v1.FieldsTest.ISuper2.privateStaticFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.ISuper2.privateStaticInt",
+                        "de.team33.test.fields.v1.FieldsTest.ISuper2.privateFinalInt",
+                        "de.team33.test.fields.v1.FieldsTest.ISuper2.privateInt",
+                        "..privateStaticFinalInt",
+                        "..privateStaticInt",
+                        "..privateFinalInt",
+                        "..privateInt",
+                        "..privateTransientInt",
+                        ".privateStaticFinalInt",
+                        ".privateStaticInt",
+                        ".privateFinalInt",
+                        ".privateInt",
+                        "privateStaticFinalInt",
+                        "privateFinalInt",
+                        "privateInt"),
+                Fields.wideStreamOf(Sub.class)
+                      .map(field -> Fields.compactName(Sub.class, field))
+                      .collect(Collectors.toList())
+        );
+    }
+
+    @Test
+    public final void significantFlat() {
         assertEquals(
                 Arrays.asList(
                         "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
