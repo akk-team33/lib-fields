@@ -16,7 +16,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
-public class TestFields {
+public class FieldsTest {
 
     private final Class<?> theClass = Level3.class;
 
@@ -26,7 +26,7 @@ public class TestFields {
 
     private static List<Field> listDeep(final Class<?> type) {
         final List<Field> result = Optional.ofNullable(type.getSuperclass())
-                                           .map(TestFields::listDeep)
+                                           .map(FieldsTest::listDeep)
                                            .orElseGet(ArrayList::new);
         result.addAll(asList(type.getDeclaredFields()));
         return result;
