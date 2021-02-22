@@ -1,14 +1,19 @@
 package de.team33.test.fields.v1;
 
 import de.team33.libs.fields.v1.Fields;
+import de.team33.libs.fields.v1.Fields.Naming;
+import de.team33.libs.fields.v1.Fields.Streaming;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 public class FieldsTest {
@@ -21,7 +26,7 @@ public class FieldsTest {
                         "private static int de.team33.test.fields.v1.FieldsTest$Inner.privateStaticInt",
                         "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
                         "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
-                Fields.Streaming.FLAT.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
+                Streaming.FLAT.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
         );
     }
 
@@ -38,7 +43,7 @@ public class FieldsTest {
                         "private static int de.team33.test.fields.v1.FieldsTest$Inner.privateStaticInt",
                         "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
                         "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
-                Fields.Streaming.DEEP.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
+                Streaming.DEEP.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
         );
     }
 
@@ -63,7 +68,7 @@ public class FieldsTest {
                         "private static int de.team33.test.fields.v1.FieldsTest$Inner.privateStaticInt",
                         "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
                         "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
-                Fields.Streaming.WIDE.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
+                Streaming.WIDE.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
                     );
     }
 
@@ -103,7 +108,7 @@ public class FieldsTest {
                 Arrays.asList(
                         "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
                         "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
-                Fields.Streaming.SIGNIFICANT_FLAT.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
+                Streaming.SIGNIFICANT_FLAT.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
                     );
     }
 
@@ -115,7 +120,7 @@ public class FieldsTest {
                         "private int de.team33.test.fields.v1.FieldsTest$Super.privateInt",
                         "private final int de.team33.test.fields.v1.FieldsTest$Inner.privateFinalInt",
                         "private int de.team33.test.fields.v1.FieldsTest$Inner.privateInt"),
-                Fields.Streaming.SIGNIFICANT_DEEP.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
+                Streaming.SIGNIFICANT_DEEP.apply(Inner.class).map(Field::toString).collect(Collectors.toList())
                     );
     }
 
@@ -132,7 +137,7 @@ public class FieldsTest {
                         "privateStaticInt",
                         "privateFinalInt",
                         "privateInt"),
-                Fields.deepStreamOf(Inner.class).map(Fields.Naming.SIMPLE).collect(Collectors.toList())
+                Fields.deepStreamOf(Inner.class).map(Naming.SIMPLE).collect(Collectors.toList())
         );
     }
 
@@ -149,7 +154,7 @@ public class FieldsTest {
                         "de.team33.test.fields.v1.FieldsTest.Inner.privateStaticInt",
                         "de.team33.test.fields.v1.FieldsTest.Inner.privateFinalInt",
                         "de.team33.test.fields.v1.FieldsTest.Inner.privateInt"),
-                Fields.deepStreamOf(Inner.class).map(Fields.Naming.CANONICAL).collect(Collectors.toList())
+                Fields.deepStreamOf(Inner.class).map(Naming.CANONICAL).collect(Collectors.toList())
         );
     }
 
@@ -170,7 +175,7 @@ public class FieldsTest {
                         "privateFinalInt",
                         "privateInt"),
                 Fields.deepStreamOf(Sub.class)
-                        .map(Fields.Naming.conditional(Sub.class))
+                        .map(Naming.conditional(Sub.class))
                         .collect(Collectors.toList())
         );
     }
@@ -192,7 +197,7 @@ public class FieldsTest {
                         "privateFinalInt",
                         "privateInt"),
                 Fields.deepStreamOf(Sub.class)
-                        .map(Fields.Naming.compact(Sub.class))
+                        .map(Naming.compact(Sub.class))
                         .collect(Collectors.toList())
         );
     }
@@ -204,6 +209,49 @@ public class FieldsTest {
             assertTrue(canonicalName.startsWith(Sub.class.getCanonicalName()));
             assertTrue(canonicalName.endsWith(field.getName()));
         });
+    }
+
+    @Test
+    public final void mapOf() throws NoSuchFieldException {
+        final Map<String, Field> expected = new HashMap<String, Field>() {{
+            put("..privateStaticFinalInt", Super.class.getDeclaredField("privateStaticFinalInt"));
+            put("..privateStaticInt",      Super.class.getDeclaredField("privateStaticInt"));
+            put("..privateFinalInt",       Super.class.getDeclaredField("privateFinalInt"));
+            put("..privateInt",            Super.class.getDeclaredField("privateInt"));
+            put("..privateTransientInt",   Super.class.getDeclaredField("privateTransientInt"));
+            put(".privateStaticFinalInt",  Inner.class.getDeclaredField("privateStaticFinalInt"));
+            put(".privateStaticInt",       Inner.class.getDeclaredField("privateStaticInt"));
+            put(".privateFinalInt",        Inner.class.getDeclaredField("privateFinalInt"));
+            put(".privateInt",             Inner.class.getDeclaredField("privateInt"));
+            put("privateStaticFinalInt",   Sub.class.getDeclaredField("privateStaticFinalInt"));
+            put("privateFinalInt",         Sub.class.getDeclaredField("privateFinalInt"));
+            put("privateInt",              Sub.class.getDeclaredField("privateInt"));
+        }};
+        final Map<String, Field> result = Fields.mapBy(Streaming.DEEP.apply(Sub.class), Naming.compact(Sub.class));
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public final void mapOfInstance() throws NoSuchFieldException {
+        final Map<String, Field> expected = new HashMap<String, Field>() {{
+            put("..privateFinalInt",       Super.class.getDeclaredField("privateFinalInt"));
+            put("..privateInt",            Super.class.getDeclaredField("privateInt"));
+            put("..privateTransientInt",   Super.class.getDeclaredField("privateTransientInt"));
+            put(".privateFinalInt",        Inner.class.getDeclaredField("privateFinalInt"));
+            put(".privateInt",             Inner.class.getDeclaredField("privateInt"));
+            put("privateFinalInt",         Sub.class.getDeclaredField("privateFinalInt"));
+            put("privateInt",              Sub.class.getDeclaredField("privateInt"));
+        }};
+        final Map<String, Field> result = Fields.mapBy(Streaming.INSTANCE_DEEP.apply(Sub.class),
+                                                       Naming.compact(Sub.class));
+        assertEquals(expected, result);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public final void mapOfWithNameClashes() {
+        // Using <Streaming.DEEP> and <Naming.SIMPLE> on <Sub.class> is expected to produce name clashes ...
+        final Map<String, Field> result = Fields.mapBy(Streaming.DEEP.apply(Sub.class), Naming.SIMPLE);
+        fail("Expected to fail but was " + result);
     }
 
     @SuppressWarnings("unused")

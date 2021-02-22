@@ -10,6 +10,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 
@@ -26,6 +27,12 @@ public final class Fields {
 
     private static <E> Stream<E> streamOfNullable(final E element) {
         return (null == element) ? Stream.empty() : Stream.of(element);
+    }
+
+    private static Stream<Field> streamOf(final Stream<Class<?>> classes) {
+        return classes
+                .map(Class::getDeclaredFields)
+                .flatMap(Stream::of);
     }
 
     /**
@@ -92,17 +99,21 @@ public final class Fields {
         return field.getDeclaringClass().getCanonicalName() + "." + field.getName();
     }
 
-    private static Stream<Field> streamOf(final Stream<Class<?>> classes) {
-        return classes.map(Class::getDeclaredFields)
-                      .flatMap(Stream::of);
-    }
-
-    private static Map<String, Field> mapping(final Class<?> type,
-                                              final Function<Class<?>, Stream<Field>> streaming,
-                                              final Function<Field, String> naming) {
-        return streaming.apply(type)
-                        .peek(field -> field.setAccessible(true))
-                        .collect(toMap(naming, field -> field));
+    /**
+     * Creates a {@link Map} by a {@link Stream} of {@link Field fields}. The keys in the result are to be understood
+     * as logical names of the associated fields, but they do not necessarily have to match their
+     * {@linkplain Field#getName() plain field name}.
+     * <p>
+     * Any {@link Field} in the result will be {@link Field#setAccessible(boolean) set accessible}!
+     *
+     * @param fields A {@link Stream} of {@link Field}s.
+     * @param naming    A {@link Function} to get a logical field name by a {@link Field}.
+     * @throws IllegalStateException if the {@code naming} produces name clashes for different fields
+     */
+    public static Map<String, Field> mapBy(final Stream<Field> fields,
+                                           final Function<Field, String> naming) {
+        return fields.peek(field -> field.setAccessible(true))
+                     .collect(toMap(naming, identity()));
     }
 
     /**
@@ -261,24 +272,24 @@ public final class Fields {
          * Defines a {@link Mapping} that only considers the fields straightly declared by the underlying class
          * which are not static.
          */
-        Mapping INSTANCE_FLAT = type -> mapping(type, Streaming.INSTANCE_FLAT, Naming.SIMPLE);
+        Mapping INSTANCE_FLAT = type -> mapBy(Streaming.INSTANCE_FLAT.apply(type), Naming.SIMPLE);
 
         /**
          * Defines a {@link Mapping} that only considers the fields straightly declared by the underlying class,
          * which are neither static nor transient.
          */
-        Mapping SIGNIFICANT_FLAT = type -> mapping(type, Streaming.SIGNIFICANT_FLAT, Naming.SIMPLE);
+        Mapping SIGNIFICANT_FLAT = type -> mapBy(Streaming.SIGNIFICANT_FLAT.apply(type), Naming.SIMPLE);
 
         /**
          * Defines a {@link Mapping} that considers the fields declared by the underlying class or one of its
          * superclasses which are not static.
          */
-        Mapping INSTANCE_DEEP = type -> mapping(type, Streaming.INSTANCE_DEEP, Naming.compact(type));
+        Mapping INSTANCE_DEEP = type -> mapBy(Streaming.INSTANCE_DEEP.apply(type), Naming.compact(type));
 
         /**
          * Defines a {@link Mapping} that considers the fields declared by the underlying class or one of its
          * superclasses, which are neither static nor transient.
          */
-        Mapping SIGNIFICANT_DEEP = type -> mapping(type, Streaming.SIGNIFICANT_DEEP, Naming.compact(type));
+        Mapping SIGNIFICANT_DEEP = type -> mapBy(Streaming.SIGNIFICANT_DEEP.apply(type), Naming.compact(type));
     }
 }

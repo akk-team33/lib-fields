@@ -6,7 +6,7 @@ import java.util.Date;
 
 
 @SuppressWarnings("unused")
-public class Level3 extends Level2 {
+public class Level3 extends Level2 implements Level2a, Level2b, Level2c {
 
   private final int privateFinalInt;
   private final String privateFinalString;

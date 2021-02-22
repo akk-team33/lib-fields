@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 
-abstract class Level2 extends Level1 {
+abstract class Level2 extends Level1 implements Level1a, Level1b, Level1c {
 
   private final long privateFinalLong;
   private final List<String> privateFinalListOfString;
