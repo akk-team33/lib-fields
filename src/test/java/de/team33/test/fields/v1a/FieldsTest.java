@@ -6,11 +6,19 @@ import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static de.team33.libs.fields.v1a.Fields.Strategy.DEEP;
+import static de.team33.libs.fields.v1a.Fields.Strategy.PUBLIC;
+import static de.team33.libs.fields.v1a.Fields.Strategy.STRAIGHT;
+import static de.team33.libs.fields.v1a.Fields.Strategy.WIDE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -19,6 +27,10 @@ import static org.junit.Assert.*;
 public class FieldsTest {
 
     private final Class<?> theClass = Level3.class;
+
+    private static List<Field> listPublic(final Class<?> type) {
+        return asList(type.getFields());
+    }
 
     private static List<Field> listFlat(final Class<?> type) {
         return asList(type.getDeclaredFields());
@@ -112,49 +124,25 @@ public class FieldsTest {
                      wideList.size(), new HashSet<>(wideList).size());
     }
 
-    /**
-     * It is expected that {@link Fields#stream(Class)} returns a {@link Stream} that consists of all the fields that
-     * are declared directly in the context of the given class.
-     */
     @Test
     public final void stream() {
-        final List<Field> expected = listFlat(theClass);
-        final List<Field> collected = Fields.stream(theClass).collect(toList());
-        assertEquals("The result list is expected to have a definite size",
-                     expected.size(), collected.size());
-        assertEquals("The result list is expected to have a definite content",
-                     new HashSet<>(expected), new HashSet<>(collected));
-        // Remark: The result list is not expected to have a definite order!
+        final Map<Fields.Strategy, Function<Class<?>, List<Field>>> cases = new EnumMap<>(Fields.Strategy.class);
+        cases.put(STRAIGHT, FieldsTest::listFlat);
+        cases.put(DEEP, FieldsTest::listDeep);
+        cases.put(WIDE, FieldsTest::listAll);
+        cases.put(PUBLIC, FieldsTest::listPublic);
 
-        final List<Field> empty = Fields.stream(null).collect(toList());
-        assertEquals("The result list is expected to be empty", emptyList(), empty);
-    }
+        cases.forEach(((strategy, expectation) -> {
+            final List<Field> expected = expectation.apply(theClass);
+            final List<Field> collected = Fields.stream(strategy, theClass).collect(toList());
+            assertEquals("[" + strategy + "] The result list is expected to have a definite size",
+                         expected.size(), collected.size());
+            assertEquals("[" + strategy + "] The result list is expected to have a definite content",
+                         new HashSet<>(expected), new HashSet<>(collected));
+            // Remark: The result list is not expected to have a definite order!
 
-    @Test
-    public final void streamDeep() {
-        final List<Field> expected = listDeep(theClass);
-        final List<Field> collected = Fields.streamDeep(theClass).collect(toList());
-        assertEquals("The result list is expected to have a definite size",
-                     expected.size(), collected.size());
-        assertEquals("The result list is expected to have a definite content",
-                     new HashSet<>(expected), new HashSet<>(collected));
-        // Remark: The result list is not expected to have a definite order!
-
-        final List<Field> empty = Fields.streamDeep(null).collect(toList());
-        assertEquals("The result list is expected to be empty", emptyList(), empty);
-    }
-
-    @Test
-    public final void streamAll() {
-        final List<Field> expected = listAll(Level3.class);
-        final List<Field> collected = Fields.streamAll(Level3.class).collect(toList());
-        assertEquals("The result list is expected to have a definite size",
-                     expected.size(), collected.size());
-        assertEquals("The result list is expected to have a definite content",
-                     new HashSet<>(expected), new HashSet<>(collected));
-        // Remark: The result list is not expected to have a definite order!
-
-        final List<Field> empty = Fields.streamAll(null).collect(toList());
-        assertEquals("The result list is expected to be empty", emptyList(), empty);
+            final List<Field> empty = Fields.stream(STRAIGHT, null).collect(toList());
+            assertEquals("[" + strategy + "] The result list is expected to be empty", emptyList(), empty);
+        }));
     }
 }
